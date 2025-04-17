@@ -1,11 +1,11 @@
 import typer
 from typing import Optional,List
-from phi.agent import Agent
-from phi.model.groq import Groq
-from phi.assistant import Assistant
+from phi.agent import Agent     # type: ignore
+from phi.model.groq import Groq     # type: ignore
+from phi.assistant import Assistant     # type: ignore
 from phi.storage.agent.postgres import PgAgentStorage
 from phi.knowledge.pdf import PDFUrlKnowledgeBase
-from phi.vectordb.pgvector import PgVector2
+from phi.vectordb.pgvector import PgVector2     # type: ignore
 from phi.embedder.google import GeminiEmbedder
 
 import os
@@ -13,8 +13,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-os.environ["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY")
-os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+os.environ["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY") # type: ignore
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY") # type: ignore
 
 # Ensure that API keys are set properly
 if not os.environ["GROQ_API_KEY"] or not os.environ["GOOGLE_API_KEY"]:
@@ -25,7 +25,7 @@ db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
 knowledge_base=PDFUrlKnowledgeBase(
     urls=["https://phi-public.s3.amazonaws.com/recipes/ThaiRecipes.pdf"],
     vector_db=PgVector2(collection="dish",db_url=db_url,embedder=GeminiEmbedder()),
-    chunk=False
+    chunk=False # type: ignore
 )
 
 knowledge_base.load()
@@ -38,7 +38,7 @@ def pdf_assistant(new: bool = False, user: str = "user"):
     run_id: Optional[str] = None
 
     assistant = Agent(
-        model=Groq(id="llama-3.3-70b-versatile", embedder=GeminiEmbedder()),
+        model=Groq(id="llama-3.3-70b-versatile", embedder=GeminiEmbedder()),    # type: ignore
         run_id=run_id,
         user_id=user,
         knowledge_base=knowledge_base,
